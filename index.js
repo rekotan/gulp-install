@@ -53,6 +53,9 @@ module.exports = exports = function install(opts) {
         if (cmd.cmd === 'npm' && opts && opts.noOptional) {
           cmd.args.push('--no-optional');
         }
+        if (cmd.cmd === 'pip' && opts && opts.target) {
+          cmd.args.push('--target', opts.target);
+        }
 
         cmd.cwd = path.dirname(file.path);
         toRun.push(cmd);

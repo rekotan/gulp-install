@@ -305,6 +305,31 @@ describe('gulp-install', function () {
     stream.end();
   });
 
+  it('should run `pip install --target` if `target` option is set', function(done) {
+    var file = fixture('requirements.txt');
+
+    var stream = install({target:'.'});
+
+    stream.on('error', function(err) {
+      should.exist(err);
+      done(err);
+    });
+
+    stream.on('data', function () {
+    });
+
+    stream.on('end', function () {
+      commandRunner.run.called.should.equal(1);
+      commandRunner.run.commands[0].cmd.should.equal('pip');
+      commandRunner.run.commands[0].args.should.eql(['install', '-r', 'requirements.txt', '--target', '.']);
+      done();
+    });
+
+    stream.write(file);
+
+    stream.end();
+  });
+
   it('should run `npm install --no-optional` if `noOptional` option is set', function(done) {
     var files = [
       fixture('package.json')
